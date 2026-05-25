@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{{ "编辑事件" if event else "新增事件" }} - 我们的时间线{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">{{ "Edit Memory" if event else "New Memory" }}</p>
+    <h1>{{ "编辑事件" if event else "新增事件" }}</h1>
+  </div>
+</section>
+
+<form class="memory-form" method="post" enctype="multipart/form-data">
+  <label>
+    <span>标题</span>
+    <input name="title" required value="{{ event.title if event else '' }}" placeholder="比如：第一次一起看海">
+  </label>
+
+  <div class="form-grid">
+    <label>
+      <span>日期</span>
+      <input type="date" name="event_date" required value="{{ event.event_date if event else today.isoformat() }}">
+    </label>
+    <label>
+      <span>分类</span>
+      <select name="category">
+        {% for category in categories %}
+          <option value="{{ category }}" {% if event and event.category == category %}selected{% endif %}>{{ category }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      <span>心情</span>
+      <select name="mood">
+        <option value="">不选择</option>
+        {% for mood in moods %}
+          <option value="{{ mood }}" {% if event and event.mood == mood %}selected{% endif %}>{{ mood }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+
+  <label>
+    <span>内容</span>
+    <textarea name="content" required rows="8" placeholder="写下这一天发生了什么、说过什么、为什么值得记住。">{{ event.content if event else '' }}</textarea>
+  </label>
+
+  <label>
+    <span>照片</span>
+    <input type="file" name="image" accept="image/png,image/jpeg,image/gif,image/webp">
+  </label>
+
+  {% if event and event.image_path %}
+    <img class="preview-image" src="{{ url_for('uploaded_file', filename=event.image_path) }}" alt="{{ event.title }}">
+  {% endif %}
+
+  <label class="checkbox">
+    <input type="checkbox" name="is_important" {% if event and event.is_important %}checked{% endif %}>
+    <span>标记为重要回忆</span>
+  </label>
+
+  <div class="form-actions">
+    <button class="button primary" type="submit">保存</button>
+    <a class="button ghost" href="{{ url_for('timeline') }}">取消</a>
+  </div>
+</form>
+{% endblock %}

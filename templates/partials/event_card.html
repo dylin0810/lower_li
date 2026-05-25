@@ -1,0 +1,21 @@
+<article class="event-card">
+  {% if event.image_path %}
+    <img class="event-image" src="{{ url_for('uploaded_file', filename=event.image_path) }}" alt="{{ event.title }}">
+  {% endif %}
+  <div class="event-body">
+    <div class="event-meta">
+      <span>{{ event.event_date }}</span>
+      <span>{{ event.category }}</span>
+      {% if event.mood %}<span>{{ event.mood }}</span>{% endif %}
+      {% if event.is_important %}<span>重要</span>{% endif %}
+    </div>
+    <h3>{{ event.title }}</h3>
+    <p>{{ event.content }}</p>
+    <div class="event-actions">
+      <a href="{{ url_for('edit_event', event_id=event.id) }}">编辑</a>
+      <form method="post" action="{{ url_for('delete_event', event_id=event.id) }}" onsubmit="return confirm('确定要删除这条回忆吗？')">
+        <button type="submit">删除</button>
+      </form>
+    </div>
+  </div>
+</article>

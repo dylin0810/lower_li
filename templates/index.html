@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}首页 - 我们的时间线{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Couple Memory</p>
+    <h1>把日常认真收藏起来</h1>
+    {% if days_together %}
+      <p class="hero-copy">你们已经一起走过 <strong>{{ days_together }}</strong> 天。</p>
+    {% else %}
+      <p class="hero-copy">先设置在一起的日期，首页就会自动计算恋爱天数。</p>
+    {% endif %}
+  </div>
+  <div class="hero-actions">
+    <a class="button primary" href="{{ url_for('new_event') }}">记录今天</a>
+    <a class="button ghost" href="{{ url_for('settings') }}">设置日期</a>
+  </div>
+</section>
+
+<section class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-label">记录总数</span>
+    <strong>{{ event_count }}</strong>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">在一起</span>
+    <strong>{{ days_together or "未设置" }}</strong>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">重要回忆</span>
+    <strong>{{ important_events|length }}</strong>
+  </div>
+</section>
+
+<section class="split-section">
+  <div>
+    <div class="section-title">
+      <h2>最近回忆</h2>
+      <a href="{{ url_for('timeline') }}">查看全部</a>
+    </div>
+    <div class="event-list compact">
+      {% for event in latest_events %}
+        {% include "partials/event_card.html" %}
+      {% else %}
+        <div class="empty-state">还没有记录。第一条可以从一次普通散步开始。</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <aside class="side-panel">
+    <h2>重要回忆</h2>
+    {% for event in important_events %}
+      <a class="mini-event" href="{{ url_for('edit_event', event_id=event.id) }}">
+        <span>{{ event.event_date }}</span>
+        <strong>{{ event.title }}</strong>
+      </a>
+    {% else %}
+      <p class="muted">在新增或编辑事件时勾选“重要回忆”，这里就会出现它。</p>
+    {% endfor %}
+  </aside>
+</section>
+{% endblock %}

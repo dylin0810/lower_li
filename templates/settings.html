@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}设置 - 我们的时间线{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">Settings</p>
+    <h1>基础设置</h1>
+  </div>
+</section>
+
+<form class="memory-form" method="post">
+  <label>
+    <span>在一起的日期</span>
+    <input type="date" name="together_since" value="{{ together_since or '' }}">
+  </label>
+  <div class="form-actions">
+    <button class="button primary" type="submit">保存设置</button>
+  </div>
+</form>
+{% endblock %}

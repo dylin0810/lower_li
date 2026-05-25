@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}时间线 - 我们的时间线{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">Timeline</p>
+    <h1>所有回忆</h1>
+  </div>
+  <a class="button primary" href="{{ url_for('new_event') }}">新增事件</a>
+</section>
+
+<form class="filter-bar" method="get">
+  <input name="q" value="{{ keyword }}" placeholder="搜索标题或内容">
+  <select name="category">
+    <option value="">全部分类</option>
+    {% for category in categories %}
+      <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+    {% endfor %}
+  </select>
+  <button class="button" type="submit">筛选</button>
+  <a class="button ghost" href="{{ url_for('timeline') }}">重置</a>
+</form>
+
+<div class="timeline">
+  {% for event in events %}
+    {% include "partials/event_card.html" %}
+  {% else %}
+    <div class="empty-state">没有找到记录。换个关键词，或者新增一条吧。</div>
+  {% endfor %}
+</div>
+{% endblock %}
